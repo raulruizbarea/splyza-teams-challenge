@@ -1,0 +1,33 @@
+{
+  "app": {
+    "error": "Error",
+    "or": "or",
+    "buttons": {
+      "invite": "Invite",
+      "copy": "Copy",
+      "send-email": "Send email",
+      "ok": "OK",
+      "cancel": "Cancel"
+    }
+  },
+  "enums": {
+    "roles": {
+      "role": "Role",
+      "manager": "Coach",
+      "editor": "Player Coach",
+      "member": "Player",
+      "readonly": "Supporter"
+    }
+  },
+  "invitation": {
+    "members": "Members",
+    "supporters": "Supporters",
+    "limit": "Limit",
+    "role-info": "You can change the members role later from the team members list",
+    "invite-link": "Invite link",
+    "invite-info": "URL is valid for 1 week",
+    "reach-the-limit": "The team has reach the limit!",
+    "url-copied": "The url has been copied",
+    "email-address": "E-mail address"
+  }
+}

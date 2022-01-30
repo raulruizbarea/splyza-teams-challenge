@@ -1,0 +1,163 @@
+<div class="flex flex-column h-screen">
+  <div class="flex">
+    <app-header class="flex-grow-1" [title]="'app.buttons.invite'"></app-header>
+  </div>
+
+  <div
+    class="flex flex-column flex-grow-1 justify-content-center lg:w-3 mx-4 lg:mx-auto"
+    *ngIf="!!team; else skeleton"
+  >
+    <p-messages id="error" severity="error" *ngIf="isTeamFull; else notFull">
+      <ng-template pTemplate>
+        <div class="ml-2">
+          {{ "invitation.reach-the-limit" | translate }}
+        </div>
+      </ng-template>
+    </p-messages>
+
+    <ng-template #notFull>
+      <form [formGroup]="invitationForm" (ngSubmit)="onSubmit()">
+        <div class="flex justify-content-between mx-2">
+          <div class="flex flex-column text-left">
+            {{ "invitation.members" | translate }}: {{ totalMembers }}
+            <br />
+            <div *ngIf="team.plan.supporterLimit != 0">
+              {{ "invitation.supporters" | translate }}:
+              {{ team.members.supporters }}
+            </div>
+          </div>
+          <div class="flex flex-column text-right">
+            <small
+              >{{ "invitation.limit" | translate }}:
+              {{ team.plan.memberLimit }}</small
+            >
+            <div *ngIf="team.plan.supporterLimit != 0">
+              <small
+                >{{ "invitation.limit" | translate }}:
+                {{ team.plan.supporterLimit }}</small
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="my-4">
+          <label for="role">{{ "enums.roles.role" | translate }}</label>
+          <p-dropdown
+            id="role"
+            [options]="roles"
+            (onChange)="onInvitationPermissionsChange($event)"
+            styleClass="w-full"
+            optionLabel="role"
+            optionDisabled="inactive"
+            formControlName="invitationRole"
+          >
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedRole; else fullTeam">
+                {{ "enums.roles." + selectedRole.role | translate }}
+              </div>
+              <ng-template #fullTeam><div class="h-1rem"></div></ng-template>
+            </ng-template>
+            <ng-template let-role pTemplate="item">
+              <div>{{ "enums.roles." + role.role | translate }}</div>
+            </ng-template>
+          </p-dropdown>
+          <small>{{ "invitation.role-info" | translate }}</small>
+        </div>
+
+        <div class="my-4">
+          <label for="invitation">{{
+            "invitation.invite-link" | translate
+          }}</label>
+          <input
+            id="invitation"
+            type="text"
+            pInputText
+            class="my-2 w-full"
+            formControlName="invitationLink"
+          />
+          <small class="flex justify-content-center">{{
+            "invitation.invite-info" | translate
+          }}</small>
+        </div>
+
+        <div class="mx-4">
+          <p-button
+            id="copy"
+            styleClass="block my-2 w-full bg-gray-900"
+            label="{{ 'app.buttons.copy' | translate }}"
+            [disabled]="isLoading"
+            (onClick)="copyInviteLink()"
+          ></p-button>
+          <p-toast position="bottom-center" key="copyToast"></p-toast>
+
+          <p-divider align="center">{{ "app.or" | translate }}</p-divider>
+
+          <p-button
+            id="send-email"
+            styleClass="block my-2 w-full bg-gray-900"
+            label="{{ 'app.buttons.send-email' | translate }}"
+            [disabled]="isLoading"
+            (onClick)="sendEmail()"
+          ></p-button>
+          <p-dialog
+            id="dialog"
+            [(visible)]="displayDialog"
+            [draggable]="false"
+            [modal]="true"
+            [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+            [style]="{ width: '30vw' }"
+            (onHide)="onCloseDialog()"
+          >
+            <div class="my-4">
+              <label for="email">{{
+                "invitation.email-address" | translate
+              }}</label>
+              <input
+                id="email"
+                type="email"
+                pInputText
+                class="my-2 w-full"
+                placeholder="{{ 'invitation.email-address' | translate }}"
+                formControlName="email"
+              />
+            </div>
+            <ng-template pTemplate="footer">
+              <p-button
+                id="cancel"
+                label="{{ 'app.buttons.cancel' | translate }}"
+                styleClass="p-button-link"
+                (onClick)="displayDialog = false"
+              ></p-button>
+              <p-button
+                id="ok"
+                label="{{ 'app.buttons.ok' | translate }}"
+                styleClass="p-button-link"
+                type="submit"
+                [disabled]="this.invitationForm.invalid"
+              ></p-button>
+            </ng-template>
+          </p-dialog>
+        </div>
+      </form>
+    </ng-template>
+  </div>
+
+  <ng-template #skeleton>
+    <div
+      class="flex flex-column flex-grow-1 justify-content-center lg:w-3 mx-4 lg:mx-auto"
+    >
+      <p-skeleton
+        width="w-full"
+        height="3rem"
+        styleClass="mx-2 my-2"
+      ></p-skeleton>
+      <p-skeleton width="w-full" height="5rem" styleClass="my-4"></p-skeleton>
+      <p-skeleton width="w-full" height="5rem" styleClass="my-4"></p-skeleton>
+      <p-skeleton
+        width="w-full"
+        height="8rem"
+        styleClass="mx-4 my-2"
+      ></p-skeleton>
+    </div>
+  </ng-template>
+</div>

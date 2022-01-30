@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  splyza-teams-challenge:
+    image: "splyza-teams-challenge:rc_v0.0.0"
+    container_name: "splyza-teams-challenge"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 80:80
